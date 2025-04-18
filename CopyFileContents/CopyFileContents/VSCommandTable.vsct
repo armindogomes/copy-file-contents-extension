@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <Extern href="stdidcmd.h"/>
+  <Extern href="vsshlids.h"/>
+  <Include href="KnownImageIds.vsct"/>
+  <Include href="VSGlobals.vsct"/>
+
+	<Commands package="CopyFileContents">
+		<Groups>
+			<Group guid="guidCopyFileContents" id="ContentClipboardGroup" priority="0x0600">
+				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE" />
+			</Group>
+		</Groups>
+
+		<Buttons>
+			<Button guid="guidCopyFileContents" id="CopyToClipboardCommand" priority="0x0100" type="Button">
+				<Parent guid="guidCopyFileContents" id="ContentClipboardGroup" />
+				<Icon guid="ImageCatalogGuid" id="Copy" />
+				<Strings>
+					<ButtonText>Copy content to clipboard</ButtonText>
+				</Strings>
+			</Button>
+		</Buttons>
+	</Commands>
+
+	<Symbols>
+		<GuidSymbol name="CopyFileContents" value="{bad1b592-fd69-4e09-bf85-daed5bb1b9a1}" />
+		<GuidSymbol name="guidCopyFileContents" value="{bad1b592-fd69-4e09-bf85-daed5bb1b9a1}">
+			<IDSymbol name="ContentClipboardGroup" value="0x0001" />
+			<IDSymbol name="CopyToClipboardCommand" value="0x0100" />
+		</GuidSymbol>
+	</Symbols>
+</CommandTable>
