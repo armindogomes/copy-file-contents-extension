@@ -18,7 +18,7 @@ internal sealed class CopyToClipboardCommand : BaseCommand<CopyToClipboardComman
 			return;
 		}
 
-		await VS.StatusBar.ShowMessageAsync($"Starting to copy the content of {items.Count()} files to the clipboard");
+		await VS.StatusBar.ShowMessageAsync($"Starting to copy the content of {items.Count()} file(s) to the clipboard");
 
 		var existingItems = items.Where(i => File.Exists(i.FullPath)).ToList();
 		var fullPaths = existingItems.Select(i => i.FullPath).ToList();

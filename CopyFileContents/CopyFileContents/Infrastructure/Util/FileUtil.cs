@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 
@@ -7,7 +8,7 @@ namespace CopyFileContents.Infrastructure.Util;
 public class FileUtil {
 
 	public static List<string> GetRelativePaths(List<string> paths) {
-		if (paths == null || paths.Count == 0) {
+		if (paths == null || !paths.Any()) {
 			return [];
 		}
 
@@ -16,14 +17,11 @@ public class FileUtil {
 			return [Path.GetFileName(singlePath)];
 		}
 
-		var normalizedPaths = paths.Select(p => p.Replace('/', '\\')).ToList();
-
-		var splitPaths = normalizedPaths.Select(p => p.Split(['\\'], StringSplitOptions.RemoveEmptyEntries)).ToList();
-
-		var maxCommon = splitPaths.Min(p => p.Length);
+		var splitPaths = paths.Select(p => p.Replace('/', '\\'))
+			.Select(p => p.Split(['\\'], StringSplitOptions.RemoveEmptyEntries)).ToImmutableList();
 		var common = 0;
 
-		while (common < maxCommon && splitPaths.All(p =>
+		while (common < splitPaths.Min(p => p.Length) && splitPaths.All(p =>
 			string.Equals(p[common], splitPaths[0][common], StringComparison.OrdinalIgnoreCase))) {
 			common++;
 		}
