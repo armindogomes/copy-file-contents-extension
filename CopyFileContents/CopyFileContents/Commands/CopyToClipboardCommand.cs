@@ -34,7 +34,7 @@ internal sealed class CopyToClipboardCommand : BaseCommand<CopyToClipboardComman
 				files.Add(new FileClipboard(relativePaths[i], sb.ToString()));
 			}
 			catch (ArgumentOutOfRangeException ex) {
-				ex.Log($"Error processing file {fullPaths[i]}: Possible capacity overflow in StringBuilder.{ex.Message}");
+				ex.Log($"Error processing file {fullPaths[i]}: Possible capacity overflow in StringBuilder - {ex.Message}");
 			}
 			catch (Exception ex) {
 				ex.Log($"Error processing file {fullPaths[i]}: {ex.Message}");

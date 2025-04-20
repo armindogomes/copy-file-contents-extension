@@ -30,6 +30,10 @@ public class FileUtil {
 	}
 
 	public static List<string> GetFullPaths(IEnumerable<SolutionItem> items) {
+		if (items is null || !items.Any()) {
+			return [];
+		}
+
 		var folders = items
 			.Where(f => f.Type == SolutionItemType.PhysicalFolder)
 			.Select(f => Path.GetFullPath(f.FullPath).TrimEnd(Path.DirectorySeparatorChar))
@@ -49,13 +53,11 @@ public class FileUtil {
 				.ForEach(files.Add);
 		}
 
-		var ss = items
-			.Where(f => f.Type == SolutionItemType.PhysicalFile && File.Exists(f.FullPath))
+		files.AddRange(items
+			.Where(f => f.Type == SolutionItemType.PhysicalFile)
 			.Select(f => f.FullPath)
 			.Where(currentFile => !files.Any(file => file == currentFile))
-			.ToList();
-
-		files.AddRange(ss);
+			.ToList());
 
 		return files.Distinct().ToList();
 	}
