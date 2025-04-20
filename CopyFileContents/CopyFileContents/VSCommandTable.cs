@@ -25,7 +25,9 @@ namespace CopyFileContents
     /// </summary>
     internal sealed partial class PackageIds
     {
-        public const int ContentClipboardGroup = 0x0001;
+        public const int ContentClipboardGroupFiles = 0x0001;
+        public const int ContentClipboardGroupFolders = 0x0002;
+        public const int ContentClipboardGroupMulti = 0x0003;
         public const int CopyToClipboardCommand = 0x0100;
     }
 }

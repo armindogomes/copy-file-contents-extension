@@ -30,8 +30,33 @@ public class FileUtil {
 	}
 
 	public static List<string> GetFullPaths(IEnumerable<SolutionItem> items) {
-		var existingItems = items.Where(i => File.Exists(i.FullPath)).ToList();
-		var fullPaths = existingItems.Select(i => i.FullPath).ToList();
-		return fullPaths;
+		var folders = items
+			.Where(f => f.Type == SolutionItemType.PhysicalFolder)
+			.Select(f => Path.GetFullPath(f.FullPath).TrimEnd(Path.DirectorySeparatorChar))
+			.Distinct()
+			.ToList();
+
+		folders = folders
+			.Where(folder => !folders.Any(other =>
+				folder != other &&
+				folder.StartsWith(other + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase)))
+			.ToList();
+
+		List<string> files = [];
+		foreach (var folder in folders) {
+			Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories)
+				.ToList()
+				.ForEach(files.Add);
+		}
+
+		var ss = items
+			.Where(f => f.Type == SolutionItemType.PhysicalFile && File.Exists(f.FullPath))
+			.Select(f => f.FullPath)
+			.Where(currentFile => !files.Any(file => file == currentFile))
+			.ToList();
+
+		files.AddRange(ss);
+
+		return files.Distinct().ToList();
 	}
 }
