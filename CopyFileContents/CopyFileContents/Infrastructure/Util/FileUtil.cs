@@ -28,4 +28,10 @@ public class FileUtil {
 
 		return splitPaths.Select(p => string.Join("\\", p.Skip(common))).ToList();
 	}
+
+	public static List<string> GetFullPaths(IEnumerable<SolutionItem> items) {
+		var existingItems = items.Where(i => File.Exists(i.FullPath)).ToList();
+		var fullPaths = existingItems.Select(i => i.FullPath).ToList();
+		return fullPaths;
+	}
 }

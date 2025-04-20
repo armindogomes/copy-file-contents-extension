@@ -1,9 +1,9 @@
-﻿using CopyFileContents.Infrastructure.Util;
-using CopyFileContents.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
+using System.Text;
+using CopyFileContents.Infrastructure.Util;
+using CopyFileContents.Models;
 
 namespace CopyFileContents;
 
@@ -20,25 +20,30 @@ internal sealed class CopyToClipboardCommand : BaseCommand<CopyToClipboardComman
 
 		await VS.StatusBar.ShowMessageAsync($"Starting to copy the content of {items.Count()} file(s) to the clipboard");
 
-		var existingItems = items.Where(i => File.Exists(i.FullPath)).ToList();
-		var fullPaths = existingItems.Select(i => i.FullPath).ToList();
+		var fullPaths = FileUtil.GetFullPaths(items);
 		var relativePaths = FileUtil.GetRelativePaths(fullPaths);
 
 		var files = new List<FileClipboard>();
-		for (int i = 0; i < fullPaths.Count; i++) {
-			var content = File.ReadAllText(fullPaths[i]);
-			files.Add(new FileClipboard(relativePaths[i], content));
-		}
-
-		if (files.Any()) {
-			const string LINE = "----------------------------------------";
+		var sb = new StringBuilder();
+		for (var i = 0; i < fullPaths.Count; i++) {
 			try {
-				Clipboard.SetText(string.Join(LINE + Environment.NewLine, files));
-				await VS.StatusBar.ShowMessageAsync($"The content of {files.Count} files has been copied");
+				sb.Append(File.ReadAllText(fullPaths[i]));
+				if (!sb.ToString().All(c => !char.IsControl(c) || c == '\n' || c == '\r' || c == '\t' || c == ' ')) {
+					throw new Exception("This is not a text file");
+				}
+				files.Add(new FileClipboard(relativePaths[i], sb.ToString()));
+			}
+			catch (ArgumentOutOfRangeException ex) {
+				ex.Log($"Error processing file {fullPaths[i]}: Possible capacity overflow in StringBuilder.{ex.Message}");
 			}
 			catch (Exception ex) {
-				await ex.LogAsync();
+				ex.Log($"Error processing file {fullPaths[i]}: {ex.Message}");
+			}
+			finally {
+				sb.Clear();
 			}
 		}
+
+		await ClipboardUtil.WriteToClipboardAsync(files);
 	}
 }
