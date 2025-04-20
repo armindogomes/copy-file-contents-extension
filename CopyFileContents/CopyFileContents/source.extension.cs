@@ -12,7 +12,7 @@ namespace CopyFileContents
         public const string Name = "Copy File Contents";
         public const string Description = @"Copy File Contents is a Visual Studio extension that lets you quickly copy the contents of one or more files selected in the Solution Explorer to the clipboard";
         public const string Language = "en-US";
-        public const string Version = "1.0";
+        public const string Version = "1.0.1";
         public const string Author = "Armindo Gomes";
         public const string Tags = "copy-paste file solution-explorer productivity";
         public const bool IsPreview = true;
