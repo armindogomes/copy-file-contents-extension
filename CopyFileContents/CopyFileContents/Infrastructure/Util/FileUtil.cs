@@ -2,6 +2,7 @@
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Microsoft.VisualStudio.Settings;
 using Newtonsoft.Json;
 
@@ -9,7 +10,7 @@ namespace CopyFileContents.Infrastructure.Util;
 
 public class FileUtil {
 
-	public static List<string> GetRelativePaths(List<string> paths) {
+	public static IEnumerable<string> GetRelativePaths(List<string> paths) {
 		if (paths is null || !paths.Any()) {
 			return [];
 		}
@@ -28,22 +29,22 @@ public class FileUtil {
 			common++;
 		}
 
-		return splitPaths.Select(p => string.Join("\\", p.Skip(common))).ToList();
+		return splitPaths.Select(p => string.Join("\\", p.Skip(common)));
 	}
 
-	public static List<string> GetFullPaths(IEnumerable<SolutionItem> items) {
+	internal static IEnumerable<string> GetFullPaths(IEnumerable<SolutionItem> items) {
 		if (items is null || !items.Any()) {
 			return [];
 		}
 
 		var folders = GetFolders(items);
-		var files = GetFiles(folders);
+		var files = GetFiles(folders).ToList();
 
 		AddFiles(items, SolutionItemType.PhysicalFile, files);
 		AddFiles(items, SolutionItemType.Solution, files);
 		AddFiles(items, SolutionItemType.Project, files);
 
-		return files.Distinct().ToList();
+		return files.Distinct();
 	}
 
 	private static void AddFiles(IEnumerable<SolutionItem> items, SolutionItemType fileType, List<string> files) => files.AddRange(items
@@ -51,7 +52,7 @@ public class FileUtil {
 			.Select(f => f.FullPath)
 			.Where(currentFile => !files.Any(file => file == currentFile)));
 
-	private static List<string> GetFolders(IEnumerable<SolutionItem> items) {
+	private static IEnumerable<string> GetFolders(IEnumerable<SolutionItem> items) {
 		var folders = items
 			.Where(f => f.Type == SolutionItemType.PhysicalFolder)
 			.Select(f => Path.GetFullPath(f.FullPath).TrimEnd(Path.DirectorySeparatorChar))
@@ -64,13 +65,11 @@ public class FileUtil {
 			.ToList();
 	}
 
-	private static List<string> GetFiles(List<string> folders) {
-		List<string> files = [];
+	private static IEnumerable<string> GetFiles(IEnumerable<string> folders) {
 		foreach (var folder in folders) {
-			Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories)
-				.ToList()
-				.ForEach(files.Add);
+			foreach (var file in Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories)) {
+				yield return file;
+			}
 		}
-		return files;
 	}
 }

@@ -13,15 +13,15 @@ internal sealed class CopyToClipboardCommand : BaseCommand<CopyToClipboardComman
 	protected override async Task ExecuteAsync(OleMenuCmdEventArgs e) {
 		var items = await VS.Solutions.GetActiveItemsAsync();
 
-		if (!items.Any()) {
+		if (items is null || !items.Any()) {
 			await VS.StatusBar.ShowMessageAsync("No file was selected. That's odd...");
 			return;
 		}
 
 		await VS.StatusBar.ShowMessageAsync($"Starting to copy the content of {items.Count()} file(s) to the clipboard");
 
-		var fullPaths = FileUtil.GetFullPaths(items);
-		var relativePaths = FileUtil.GetRelativePaths(fullPaths);
+		var fullPaths = FileUtil.GetFullPaths(items).ToList();
+		var relativePaths = FileUtil.GetRelativePaths(fullPaths).ToList();
 
 		var files = new List<FileClipboard>();
 		var sb = new StringBuilder();
