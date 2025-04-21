@@ -15,3 +15,9 @@
 
 **Selecting files and folders together**  
 ![Select Mixed Items](https://github.com/armindogomes/copy-file-contents-extension/blob/main/docs/solution-explorer-folder-and-file.png?raw=true)
+
+**Selecting project**  
+![Select Mixed Items](https://github.com/armindogomes/copy-file-contents-extension/blob/main/docs/solution-explorer-proj.png?raw=true)
+
+**Selecting solution**  
+![Select Mixed Items](https://github.com/armindogomes/copy-file-contents-extension/blob/main/docs/solution-explorer-sln.png?raw=true)
