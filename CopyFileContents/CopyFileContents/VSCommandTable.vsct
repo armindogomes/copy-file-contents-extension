@@ -1,32 +1,42 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-  <Extern href="stdidcmd.h"/>
-  <Extern href="vsshlids.h"/>
-  <Include href="KnownImageIds.vsct"/>
-  <Include href="VSGlobals.vsct"/>
+	<Extern href="stdidcmd.h"/>
+	<Extern href="vsshlids.h"/>
+	<Include href="KnownImageIds.vsct"/>
+	<Include href="VSGlobals.vsct"/>
 
 	<Commands package="CopyFileContents">
 		<Groups>
-			<!-- Files -->
-			<Group guid="guidCopyFileContents" id="ContentClipboardGroupFiles" priority="0xFFF0">
+			<!-- files -->
+			<Group guid="guidCopyFileContents" id="GroupFiles" priority="0xFFF0">
 				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE" />
 			</Group>
 
-			<!-- Folders -->
-			<Group guid="guidCopyFileContents" id="ContentClipboardGroupFolders" priority="0xFFF0">
+			<!-- folders -->
+			<Group guid="guidCopyFileContents" id="GroupFolders" priority="0xFFF0">
 				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_FOLDERNODE" />
 			</Group>
 
-			<!-- Both -->
-			<Group guid="guidCopyFileContents" id="ContentClipboardGroupMulti" priority="0xFFF0">
+			<!-- files + folders -->
+			<Group guid="guidCopyFileContents" id="GroupMulti" priority="0xFFF0">
 				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_XPROJ_MULTIITEM" />
+			</Group>
+
+			<!--projects-->
+			<Group guid="guidCopyFileContents" id="GroupProjects" priority="0xFFF0">
+				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_PROJNODE" />
+			</Group>
+
+			<!-- solution -->
+			<Group guid="guidCopyFileContents" id="GroupSolution" priority="0xFFF0">
+				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_SOLNNODE" />
 			</Group>
 		</Groups>
 
 		<Buttons>
 			<Button guid="guidCopyFileContents" id="CopyToClipboardCommand" priority="0x0100" type="Button">
-				<Parent guid="guidCopyFileContents" id="ContentClipboardGroupFiles" />
+				<Parent guid="guidCopyFileContents" id="GroupFiles" />
 				<Icon guid="ImageCatalogGuid" id="Copy" />
 				<Strings>
 					<ButtonText>Copy content to clipboard</ButtonText>
@@ -34,7 +44,7 @@
 			</Button>
 
 			<Button guid="guidCopyFileContents" id="CopyToClipboardCommand" priority="0x0100" type="Button">
-				<Parent guid="guidCopyFileContents" id="ContentClipboardGroupFolders" />
+				<Parent guid="guidCopyFileContents" id="GroupFolders" />
 				<Icon guid="ImageCatalogGuid" id="Copy" />
 				<Strings>
 					<ButtonText>Copy content to clipboard</ButtonText>
@@ -42,7 +52,23 @@
 			</Button>
 
 			<Button guid="guidCopyFileContents" id="CopyToClipboardCommand" priority="0x0100" type="Button">
-				<Parent guid="guidCopyFileContents" id="ContentClipboardGroupMulti" />
+				<Parent guid="guidCopyFileContents" id="GroupMulti" />
+				<Icon guid="ImageCatalogGuid" id="Copy" />
+				<Strings>
+					<ButtonText>Copy content to clipboard</ButtonText>
+				</Strings>
+			</Button>
+
+			<Button guid="guidCopyFileContents" id="CopyToClipboardCommand" priority="0x0100" type="Button">
+				<Parent guid="guidCopyFileContents" id="GroupProjects" />
+				<Icon guid="ImageCatalogGuid" id="Copy" />
+				<Strings>
+					<ButtonText>Copy content to clipboard</ButtonText>
+				</Strings>
+			</Button>
+
+			<Button guid="guidCopyFileContents" id="CopyToClipboardCommand" priority="0x0100" type="Button">
+				<Parent guid="guidCopyFileContents" id="GroupSolution" />
 				<Icon guid="ImageCatalogGuid" id="Copy" />
 				<Strings>
 					<ButtonText>Copy content to clipboard</ButtonText>
@@ -54,9 +80,11 @@
 	<Symbols>
 		<GuidSymbol name="CopyFileContents" value="{bad1b592-fd69-4e09-bf85-daed5bb1b9a1}" />
 		<GuidSymbol name="guidCopyFileContents" value="{bad1b592-fd69-4e09-bf85-daed5bb1b9a1}">
-			<IDSymbol name="ContentClipboardGroupFiles" value="0x0001" />
-			<IDSymbol name="ContentClipboardGroupFolders" value="0x0002" />
-			<IDSymbol name="ContentClipboardGroupMulti" value="0x0003" />
+			<IDSymbol name="GroupFiles" value="0x0001" />
+			<IDSymbol name="GroupFolders" value="0x0002" />
+			<IDSymbol name="GroupMulti" value="0x0003" />
+			<IDSymbol name="GroupProjects" value="0x0004" />
+			<IDSymbol name="GroupSolution" value="0x0005" />
 			<IDSymbol name="CopyToClipboardCommand" value="0x0100" />
 		</GuidSymbol>
 	</Symbols>

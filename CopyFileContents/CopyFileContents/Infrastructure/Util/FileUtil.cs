@@ -54,7 +54,7 @@ public class FileUtil {
 		}
 
 		files.AddRange(items
-			.Where(f => f.Type == SolutionItemType.PhysicalFile)
+			.Where(f => f.Type == SolutionItemType.PhysicalFile || f.Type == SolutionItemType.Solution || f.Type == SolutionItemType.Project)
 			.Select(f => f.FullPath)
 			.Where(currentFile => !files.Any(file => file == currentFile))
 			.ToList());
