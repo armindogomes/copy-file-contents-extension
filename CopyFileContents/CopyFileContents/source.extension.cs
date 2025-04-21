@@ -15,6 +15,6 @@ namespace CopyFileContents
         public const string Version = "1.0.4";
         public const string Author = "Armindo Gomes";
         public const string Tags = "";
-        public const bool IsPreview = true;
+        public const bool IsPreview = false;
     }
 }
