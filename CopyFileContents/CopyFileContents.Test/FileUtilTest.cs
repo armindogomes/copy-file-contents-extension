@@ -18,7 +18,7 @@ public class FileUtilTests {
 			@"file3.txt"
 		};
 
-		var output = FileUtil.GetRelativePaths(input);
+		var output = FileUtil.CreateRelativePaths(input);
 		Assert.Equal(expected, output);
 	}
 
@@ -34,7 +34,7 @@ public class FileUtilTests {
 			@"test\test1.cs"
 		};
 
-		var output = FileUtil.GetRelativePaths(input);
+		var output = FileUtil.CreateRelativePaths(input);
 		Assert.Equal(expected, output);
 	}
 
@@ -50,7 +50,7 @@ public class FileUtilTests {
 			@"d\e\file2.txt"
 		};
 
-		var output = FileUtil.GetRelativePaths(input);
+		var output = FileUtil.CreateRelativePaths(input);
 		Assert.Equal(expected, output);
 	}
 
@@ -68,7 +68,7 @@ public class FileUtilTests {
 			@"archive\2024\file3.csv"
 		};
 
-		var output = FileUtil.GetRelativePaths(input);
+		var output = FileUtil.CreateRelativePaths(input);
 		Assert.Equal(expected, output);
 	}
 
@@ -84,7 +84,7 @@ public class FileUtilTests {
 			@"D\test2.txt"
 		};
 
-		var output = FileUtil.GetRelativePaths(input);
+		var output = FileUtil.CreateRelativePaths(input);
 		Assert.Equal(expected, output);
 	}
 
@@ -102,7 +102,7 @@ public class FileUtilTests {
 			@"docs\doc1.pdf"
 		};
 
-		var output = FileUtil.GetRelativePaths(input);
+		var output = FileUtil.CreateRelativePaths(input);
 		Assert.Equal(expected, output);
 	}
 
@@ -118,7 +118,7 @@ public class FileUtilTests {
 			@"D:\data\file.txt"
 		};
 
-		var output = FileUtil.GetRelativePaths(input);
+		var output = FileUtil.CreateRelativePaths(input);
 		Assert.Equal(expected, output);
 	}
 
@@ -136,7 +136,7 @@ public class FileUtilTests {
 			@"sub2\three\three.txt"
 		};
 
-		var output = FileUtil.GetRelativePaths(input);
+		var output = FileUtil.CreateRelativePaths(input);
 		Assert.Equal(expected, output);
 	}
 
@@ -152,7 +152,7 @@ public class FileUtilTests {
 			@"file2.txt"
 		};
 
-		var output = FileUtil.GetRelativePaths(input);
+		var output = FileUtil.CreateRelativePaths(input);
 		Assert.Equal(expected, output);
 	}
 
@@ -166,7 +166,7 @@ public class FileUtilTests {
 				@"file.txt"
 			};
 
-		var output = FileUtil.GetRelativePaths(input);
+		var output = FileUtil.CreateRelativePaths(input);
 		Assert.Equal(expected, output);
 	}
 
@@ -182,7 +182,7 @@ public class FileUtilTests {
 				@"file2"
 			};
 
-		var output = FileUtil.GetRelativePaths(input);
+		var output = FileUtil.CreateRelativePaths(input);
 		Assert.Equal(expected, output);
 	}
 }

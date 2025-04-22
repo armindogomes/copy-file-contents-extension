@@ -10,7 +10,7 @@ namespace CopyFileContents.Infrastructure.Util;
 
 public class FileUtil {
 
-	public static IEnumerable<string> GetRelativePaths(List<string> paths) {
+	public static IEnumerable<string> CreateRelativePaths(List<string> paths) {
 		if (paths is null || !paths.Any()) {
 			return [];
 		}
@@ -32,13 +32,13 @@ public class FileUtil {
 		return splitPaths.Select(p => string.Join("\\", p.Skip(common)));
 	}
 
-	internal static IEnumerable<string> GetFullPaths(IEnumerable<SolutionItem> items) {
+	internal static IEnumerable<string> GetAllFiles(IEnumerable<SolutionItem> items) {
 		if (items is null || !items.Any()) {
 			return [];
 		}
 
-		var folders = GetFolders(items);
-		var files = GetFiles(folders).ToList();
+		var folders = ExtractFoldersFromSolution(items);
+		var files = ExtractFilesFromFolders(folders).ToList();
 
 		AddFiles(items, SolutionItemType.PhysicalFile, files);
 		AddFiles(items, SolutionItemType.Solution, files);
@@ -52,7 +52,7 @@ public class FileUtil {
 			.Select(f => f.FullPath)
 			.Where(currentFile => !files.Any(file => file == currentFile)));
 
-	private static IEnumerable<string> GetFolders(IEnumerable<SolutionItem> items) {
+	private static IEnumerable<string> ExtractFoldersFromSolution(IEnumerable<SolutionItem> items) {
 		var folders = items
 			.Where(f => f.Type == SolutionItemType.PhysicalFolder)
 			.Select(f => Path.GetFullPath(f.FullPath).TrimEnd(Path.DirectorySeparatorChar))
@@ -65,9 +65,39 @@ public class FileUtil {
 			.ToList();
 	}
 
-	private static IEnumerable<string> GetFiles(IEnumerable<string> folders) {
+	private static IEnumerable<string> ExtractFilesFromFolders(IEnumerable<string> folders) {
 		foreach (var folder in folders) {
-			foreach (var file in Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories)) {
+			foreach (var file in EnumerateFilesRecursively(folder)) {
+				yield return file;
+			}
+		}
+	}
+
+	private static IEnumerable<string> EnumerateFilesRecursively(string folder) {
+		string[] files = [];
+		try {
+			files = Directory.GetFiles(folder);
+		}
+		catch (Exception ex) {
+			ex.Log($"Error accessing files in folder {folder}: {ex.Message} - {ex.InnerException?.Message}");
+			yield break;
+		}
+
+		foreach (var file in files) {
+			yield return file;
+		}
+
+		string[] subfolders = [];
+		try {
+			subfolders = Directory.GetDirectories(folder);
+		}
+		catch (Exception ex) {
+			ex.Log($"Error accessing subdirectories in folder {folder}: {ex.Message} - {ex.InnerException?.Message}");
+			yield break;
+		}
+
+		foreach (var subfolder in subfolders) {
+			foreach (var file in EnumerateFilesRecursively(subfolder)) {
 				yield return file;
 			}
 		}

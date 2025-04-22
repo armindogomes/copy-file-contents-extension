@@ -20,30 +20,30 @@ internal sealed class CopyToClipboardCommand : BaseCommand<CopyToClipboardComman
 
 		await VS.StatusBar.ShowMessageAsync($"Starting to copy the content of {items.Count()} file(s) to the clipboard");
 
-		var fullPaths = FileUtil.GetFullPaths(items).ToList();
-		var relativePaths = FileUtil.GetRelativePaths(fullPaths).ToList();
+		var files = FileUtil.GetAllFiles(items).ToList();
+		var relativePaths = FileUtil.CreateRelativePaths(files).ToList();
 
-		var files = new List<FileClipboard>();
+		var contentToClipboard = new List<FileClipboard>();
 		var sb = new StringBuilder();
-		for (var i = 0; i < fullPaths.Count; i++) {
+		for (var i = 0; i < files.Count; i++) {
 			try {
-				sb.Append(File.ReadAllText(fullPaths[i]));
+				sb.Append(File.ReadAllText(files[i]));
 				if (!sb.ToString().All(c => !char.IsControl(c) || c == '\n' || c == '\r' || c == '\t' || c == ' ')) {
 					throw new Exception("This is not a text file");
 				}
-				files.Add(new FileClipboard(relativePaths[i], sb.ToString()));
+				contentToClipboard.Add(new FileClipboard(relativePaths[i], sb.ToString()));
 			}
 			catch (ArgumentOutOfRangeException ex) {
-				ex.Log($"Error processing file {fullPaths[i]}: Possible capacity overflow in StringBuilder - {ex.Message}");
+				ex.Log($"Error processing file {files[i]}: Possible capacity overflow in StringBuilder - {ex.Message}");
 			}
 			catch (Exception ex) {
-				ex.Log($"Error processing file {fullPaths[i]}: {ex.Message}");
+				ex.Log($"Error processing file {files[i]}: {ex.Message}");
 			}
 			finally {
 				sb.Clear();
 			}
 		}
 
-		await ClipboardUtil.WriteToClipboardAsync(files);
+		await ClipboardUtil.WriteToClipboardAsync(contentToClipboard);
 	}
 }
