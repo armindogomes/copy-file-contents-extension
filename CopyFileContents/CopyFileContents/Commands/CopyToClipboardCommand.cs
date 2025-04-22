@@ -21,7 +21,7 @@ internal sealed class CopyToClipboardCommand : BaseCommand<CopyToClipboardComman
 		await VS.StatusBar.ShowMessageAsync($"Starting to copy the content of {items.Count()} file(s) to the clipboard");
 
 		var files = FileUtil.GetAllFiles(items).ToList();
-		var relativePaths = FileUtil.CreateRelativePaths(files).ToList();
+		var relativePaths = FileUtil.GetRelativePathsFromCommonRoot(files).ToList();
 
 		var contentToClipboard = new List<FileClipboard>();
 		var sb = new StringBuilder();

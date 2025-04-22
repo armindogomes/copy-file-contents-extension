@@ -13,9 +13,6 @@ namespace CopyFileContents
     /// </summary>
     internal sealed partial class PackageGuids
     {
-        public const string CopyFileContentsString = "bad1b592-fd69-4e09-bf85-daed5bb1b9a1";
-        public static Guid CopyFileContents = new Guid(CopyFileContentsString);
-
         public const string guidCopyFileContentsString = "bad1b592-fd69-4e09-bf85-daed5bb1b9a1";
         public static Guid guidCopyFileContents = new Guid(guidCopyFileContentsString);
     }

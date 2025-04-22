@@ -1,17 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using Microsoft.VisualStudio.Settings;
-using Newtonsoft.Json;
 
 namespace CopyFileContents.Infrastructure.Util;
 
 public class FileUtil {
 
-	public static IEnumerable<string> CreateRelativePaths(List<string> paths) {
-		if (paths is null || !paths.Any()) {
+	public static IEnumerable<string> GetRelativePathsFromCommonRoot(List<string> paths) {
+		if (paths is null || paths.Count == 0) {
 			return [];
 		}
 
@@ -21,7 +17,7 @@ public class FileUtil {
 		}
 
 		var splitPaths = paths.Select(p => p.Replace('/', '\\'))
-			.Select(p => p.Split(['\\'], StringSplitOptions.RemoveEmptyEntries)).ToImmutableList();
+			.Select(p => p.Split(['\\'], StringSplitOptions.RemoveEmptyEntries)).ToList();
 		var common = 0;
 
 		while (common < splitPaths.Min(p => p.Length) && splitPaths.All(p =>
@@ -47,10 +43,7 @@ public class FileUtil {
 		return files.Distinct();
 	}
 
-	private static void AddFiles(IEnumerable<SolutionItem> items, SolutionItemType fileType, List<string> files) => files.AddRange(items
-			.Where(f => f.Type == fileType)
-			.Select(f => f.FullPath)
-			.Where(currentFile => !files.Any(file => file == currentFile)));
+	private static void AddFiles(IEnumerable<SolutionItem> items, SolutionItemType fileType, List<string> files) => files.AddRange(items.Where(f => f.Type == fileType).Select(f => f.FullPath));
 
 	private static IEnumerable<string> ExtractFoldersFromSolution(IEnumerable<SolutionItem> items) {
 		var folders = items
@@ -78,8 +71,16 @@ public class FileUtil {
 		try {
 			files = Directory.GetFiles(folder);
 		}
-		catch (Exception ex) {
-			ex.Log($"Error accessing files in folder {folder}: {ex.Message} - {ex.InnerException?.Message}");
+		catch (UnauthorizedAccessException ex) {
+			ex.Log($"Access denied to folder {folder}: {ex.Message}");
+			yield break;
+		}
+		catch (DirectoryNotFoundException ex) {
+			ex.Log($"Folder not found {folder}: {ex.Message}");
+			yield break;
+		}
+		catch (IOException ex) {
+			ex.Log($"I/O error accessing files in folder {folder}: {ex.Message}");
 			yield break;
 		}
 
@@ -91,8 +92,16 @@ public class FileUtil {
 		try {
 			subfolders = Directory.GetDirectories(folder);
 		}
-		catch (Exception ex) {
-			ex.Log($"Error accessing subdirectories in folder {folder}: {ex.Message} - {ex.InnerException?.Message}");
+		catch (UnauthorizedAccessException ex) {
+			ex.Log($"Access denied to subdirectories in folder {folder}: {ex.Message}");
+			yield break;
+		}
+		catch (DirectoryNotFoundException ex) {
+			ex.Log($"Subdirectory not found in folder {folder}: {ex.Message}");
+			yield break;
+		}
+		catch (IOException ex) {
+			ex.Log($"I/O error accessing subdirectories in folder {folder}: {ex.Message}");
 			yield break;
 		}
 
