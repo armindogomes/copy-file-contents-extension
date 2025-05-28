@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="CopyFileContents.99fe0985-b52d-44f1-8af2-863b1a8d1512" Version="1.0.6" Language="en-US" Publisher="Armindo Gomes" />
+        <Identity Id="CopyFileContents.99fe0985-b52d-44f1-8af2-863b1a8d1512" Version="1.0.7" Language="en-US" Publisher="Armindo Gomes" />
         <DisplayName>Copy File Contents</DisplayName>
         <Description xml:space="preserve">Copy File Contents is a Visual Studio extension that lets you quickly copy the contents of one or more files selected in the Solution Explorer to the clipboard</Description>
         <MoreInfo>https://github.com/armindogomes/copy-file-contents-extension</MoreInfo>
