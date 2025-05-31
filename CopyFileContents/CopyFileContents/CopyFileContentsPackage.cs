@@ -6,11 +6,15 @@ using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace CopyFileContents;
+
 [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
+[ProvideOptionPage(typeof(OptionsProvider.GeneralOptions), "Copy File Contents", "General", 0, 0, true)]
+[ProvideProfile(typeof(OptionsProvider.GeneralOptions), "Copy File Contents", "General", 0, 0, true)]
 [InstalledProductRegistration(Vsix.Name, Vsix.Description, Vsix.Version)]
 [ProvideMenuResource("Menus.ctmenu", 1)]
 [Guid(PackageGuids.guidCopyFileContentsString)]
 public sealed class CopyFileContentsPackage : ToolkitPackage {
+
 	protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress) {
 		await this.RegisterCommandsAsync();
 	}
