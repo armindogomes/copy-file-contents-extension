@@ -24,14 +24,16 @@ internal sealed class CopyToClipboardCommand : BaseCommand<CopyToClipboardComman
 		var relativePaths = FileUtil.GetRelativePathsFromCommonRoot(files).ToList();
 
 		var contentToClipboard = new List<FileClipboard>();
-		var sb = new StringBuilder();
+		var sb = new StringBuilder();		
+		var general = await General.GetLiveInstanceAsync();
+
 		for (var i = 0; i < files.Count; i++) {
 			try {
 				sb.Append(File.ReadAllText(files[i]));
 				if (!sb.ToString().All(c => !char.IsControl(c) || c == '\n' || c == '\r' || c == '\t' || c == ' ')) {
 					throw new Exception("This is not a text file");
 				}
-				contentToClipboard.Add(new FileClipboard(relativePaths[i], sb.ToString()));
+				contentToClipboard.Add(new FileClipboard(relativePaths[i], sb.ToString(), general.FilePrefix));
 			}
 			catch (ArgumentOutOfRangeException ex) {
 				ex.Log($"Error processing file {files[i]}: Possible capacity overflow in StringBuilder - {ex.Message}");
@@ -44,6 +46,16 @@ internal sealed class CopyToClipboardCommand : BaseCommand<CopyToClipboardComman
 			}
 		}
 
-		await ClipboardUtil.WriteToClipboardAsync(contentToClipboard);
+		await ClipboardUtil.WriteToClipboardAsync(contentToClipboard, GetSeparator(general.Separator));
+	}
+
+	private static string GetSeparator(SeparatorType separatorType) {
+		const string SEPARATOR_DASH = "----------------------------------------";
+		const string SEPARATOR_UNDERSCORE = "________________________________________";
+		return separatorType switch {
+			SeparatorType.Dashes => Environment.NewLine + SEPARATOR_DASH + Environment.NewLine + Environment.NewLine,
+			SeparatorType.Underscores => SEPARATOR_UNDERSCORE + Environment.NewLine + Environment.NewLine,
+			_ => Environment.NewLine,
+		};
 	}
 }

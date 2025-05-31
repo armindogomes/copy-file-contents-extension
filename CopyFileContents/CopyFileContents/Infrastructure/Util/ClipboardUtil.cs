@@ -7,10 +7,8 @@ namespace CopyFileContents.Infrastructure.Util;
 
 public class ClipboardUtil {
 
-	public static async Task WriteToClipboardAsync(IEnumerable<FileClipboard> files) {
+	public static async Task WriteToClipboardAsync(IEnumerable<FileClipboard> files, string separator) {
 		if (files.Any()) {
-			const string LINE = "----------------------------------------";
-			string separator = Environment.NewLine + LINE + Environment.NewLine;
 			try {
 				Clipboard.SetText(string.Join(separator, files));
 				await VS.StatusBar.ShowMessageAsync($"The content of {files.Count()} file(s) has been copied to the clipboard");

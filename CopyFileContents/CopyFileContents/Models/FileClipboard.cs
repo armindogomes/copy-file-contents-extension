@@ -1,6 +1,6 @@
 ﻿namespace CopyFileContents.Models;
 
-public record FileClipboard(string RelativePath, string FileContent) {
+public record FileClipboard(string RelativePath, string FileContent, string prefix) {
 
-	public override string ToString() => $"# {RelativePath}{Environment.NewLine}{Environment.NewLine}{FileContent}";
+	public override string ToString() => $"{prefix} {RelativePath}{Environment.NewLine}{Environment.NewLine}{FileContent}";
 }
