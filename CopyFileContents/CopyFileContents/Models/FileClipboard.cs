@@ -1,6 +1,12 @@
 ﻿namespace CopyFileContents.Models;
 
-public record FileClipboard(string RelativePath, string FileContent, string prefix) {
-
-	public override string ToString() => $"{prefix} {RelativePath}{Environment.NewLine}{Environment.NewLine}{FileContent}";
+public record FileClipboard(string RelativePath, string FileContent, string Prefix) {
+	
+	public override string ToString() {
+		var prefixFormatted = string.Empty;
+		if (!string.IsNullOrWhiteSpace(Prefix)) {
+			prefixFormatted = Prefix + " ";
+		}
+		return $"{prefixFormatted}{RelativePath}{Environment.NewLine}{Environment.NewLine}{FileContent}";
+	}
 }

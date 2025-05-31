@@ -55,7 +55,7 @@ internal sealed class CopyToClipboardCommand : BaseCommand<CopyToClipboardComman
 		return separatorType switch {
 			SeparatorType.Dashes => Environment.NewLine + Environment.NewLine + SEPARATOR_DASH + Environment.NewLine + Environment.NewLine,
 			SeparatorType.Underscores => Environment.NewLine + SEPARATOR_UNDERSCORE + Environment.NewLine + Environment.NewLine,
-			_ => Environment.NewLine,
+			_ => Environment.NewLine + Environment.NewLine,
 		};
 	}
 }

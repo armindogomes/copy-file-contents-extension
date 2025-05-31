@@ -30,7 +30,7 @@ public class General : BaseOptionModel<General> {
 	public string FilePrefix {
 		get => _filePrefix;
 		set {
-			_filePrefix = value?.Length > FILENAME_PREFIX_LIMIT ? value.Substring(0, FILENAME_PREFIX_LIMIT) : value;
+			_filePrefix = (value.Length > FILENAME_PREFIX_LIMIT ? value.Substring(0, FILENAME_PREFIX_LIMIT) : value).Trim();
 		}
 	}
 }
