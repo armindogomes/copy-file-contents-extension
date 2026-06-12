@@ -67,11 +67,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\license-bsd-3.txt">
+    <Content Include="Resources\icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="Resources\icon.png">
+    <Content Include="Resources\mit.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
